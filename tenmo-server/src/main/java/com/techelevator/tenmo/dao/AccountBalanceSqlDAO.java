@@ -18,12 +18,12 @@ public class AccountBalanceSqlDAO implements AccountBalanceDAO{
 
 
 	@Override
-	public AccountBalance getBalance() {
-		
-		String query = "SELECT * FROM accounts";
-		SqlRowSet results = this.jdbcTemplate.queryForRowSet(query);
+	public AccountBalance getBalance(int userId) {
 		AccountBalance ab = null;
-		while(results.next()) {
+		String query = "SELECT * FROM accounts WHERE user_id = ?";
+		SqlRowSet results = this.jdbcTemplate.queryForRowSet(query, userId);
+		
+		if(results.next()) {
 			ab = this.mapRowToAccount(results);
 			
 		}

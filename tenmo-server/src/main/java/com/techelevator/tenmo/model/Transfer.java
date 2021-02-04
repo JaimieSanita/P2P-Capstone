@@ -5,21 +5,21 @@ import java.math.BigDecimal;
 public class Transfer {
 
 	private int transferId;
-	private String transferFrom;
-	private String transferTo;
-	private String transferType;
+	private int transferFrom;
+	private int transferTo;
+	private int transferType;
 	private int transferStatusId;
-	private BigDecimal transferBalance;
+	private BigDecimal amount;
 	
 	public Transfer() {}
 	
-	public Transfer(int transferId, String transferFrom, String transferTo, String transferType, int transferStatus, BigDecimal transferBalance) {
+	public Transfer(int transferId, int transferFrom, int transferTo, int transferType, int transferStatus, BigDecimal transferAmount) {
 		this.transferId = transferId;
 		this.transferFrom = transferFrom;
 		this.transferTo = transferTo;
 		this.transferType = transferType;
 		this.transferStatusId = transferStatus;
-		this.transferBalance = transferBalance;
+		this.amount = transferAmount;
 	}
 
 
@@ -33,32 +33,32 @@ public class Transfer {
 	}
 
 
-	public String getTransferFrom() {
+	public int getTransferFrom() {
 		return transferFrom;
 	}
 
 
-	public void setTransferFrom(String transferFrom) {
+	public void setTransferFrom(int transferFrom) {
 		this.transferFrom = transferFrom;
 	}
 
 
-	public String getTransferTo() {
+	public int getTransferTo() {
 		return transferTo;
 	}
 
 
-	public void setTransferTo(String transferTo) {
+	public void setTransferTo(int transferTo) {
 		this.transferTo = transferTo;
 	}
 
 
-	public String getTransferType() {
+	public int getTransferType() {
 		return transferType;
 	}
 
 
-	public void setTransferType(String transferType) {
+	public void setTransferType(int transferType) {
 		this.transferType = transferType;
 	}
 
@@ -73,13 +73,13 @@ public class Transfer {
 	}
 
 
-	public BigDecimal getTransferBalance() {
-		return transferBalance;
+	public BigDecimal getTransferAmount() {
+		return amount;
 	}
 
 
-	public void setTransferBalance(BigDecimal transferBalance) {
-		this.transferBalance = transferBalance;
+	public void setTransferAmount(BigDecimal transferAmount) {
+		this.amount = transferAmount;
 	}
 	
 	

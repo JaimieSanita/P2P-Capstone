@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.controller;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,25 +17,28 @@ import com.techelevator.tenmo.model.AccountBalance;
 @PreAuthorize("isAuthenticated()")
 public class AccountBalanceController {
 
-	/*
-	private AccountBalanceDAO accountBalanceDAO;
 	
-	public AccountBalanceController(AccountBalanceDAO accountBalanceDAO) {
+	private AccountBalanceDAO accountBalanceDAO;
+	private UserDAO userDAO;
+	
+	public AccountBalanceController(AccountBalanceDAO accountBalanceDAO, UserDAO userDAO) {
 		this.accountBalanceDAO = accountBalanceDAO;
+		this.userDAO = userDAO;
 	}
-	*/
+	
 	
 	//Receiving a 401 Unauthorized error
 	
 	@RequestMapping(path = "/balance", method = RequestMethod.GET)
-	public AccountBalance getBalance() {
+	public AccountBalance getBalance(Principal principal) {
+		String username = principal.getName();
 		
-		AccountBalance ab = new AccountBalance(3, 2, BigDecimal.ONE);
-	
+		int userId = userDAO.findIdByUsername(username);
+		
+		return accountBalanceDAO.getBalance(userId);
 		
 		
-		return ab;
-			
+
 
 }
 }
