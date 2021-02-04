@@ -13,7 +13,7 @@ public interface TransferDAO {
 	
 	Transfer sendTransfer(Transfer transfer, BigDecimal TEBucks);
 	
-	List<Transfer> listUserTransfers();
+	List<Transfer> listApprovedTransfers();
 	
 	Transfer getTransferById(int id);
 	

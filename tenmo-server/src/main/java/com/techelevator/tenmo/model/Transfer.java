@@ -8,16 +8,17 @@ public class Transfer {
 	private String transferFrom;
 	private String transferTo;
 	private String transferType;
-	private String transferStatus;
+	private int transferStatusId;
 	private BigDecimal transferBalance;
 	
+	public Transfer() {}
 	
-	public Transfer(int transferId, String transferFrom, String transferTo, String transferType, String transferStatus, BigDecimal transferBalance) {
+	public Transfer(int transferId, String transferFrom, String transferTo, String transferType, int transferStatus, BigDecimal transferBalance) {
 		this.transferId = transferId;
 		this.transferFrom = transferFrom;
 		this.transferTo = transferTo;
 		this.transferType = transferType;
-		this.transferStatus = transferStatus;
+		this.transferStatusId = transferStatus;
 		this.transferBalance = transferBalance;
 	}
 
@@ -62,13 +63,13 @@ public class Transfer {
 	}
 
 
-	public String getTransferStatus() {
-		return transferStatus;
+	public int getTransferStatus() {
+		return transferStatusId;
 	}
 
 
-	public void setTransferStatus(String transferStatus) {
-		this.transferStatus = transferStatus;
+	public void setTransferStatus(int id) {
+		this.transferStatusId = id;
 	}
 
 

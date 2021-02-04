@@ -35,11 +35,11 @@ public TransferController(TransferDAO transferDAO, UserDAO userDAO) {
 */
 
 
-//Receiving a 401 Unauthorized error
+
 @RequestMapping(path = "/transfer", method = RequestMethod.POST)
 public Transfer sendTransfer(@RequestBody Transfer transfer, BigDecimal TEBucks) {
 	
-	Transfer transfer2 = new Transfer(4, "String transferFrom", "String transferTo", "String transferType", "String transferStatus",TEBucks);
+	Transfer transfer2 = new Transfer(4, "String transferFrom", "String transferTo", "String transferType", 1,TEBucks);
 	
 	
 	return transfer2;
@@ -50,7 +50,7 @@ public Transfer sendTransfer(@RequestBody Transfer transfer, BigDecimal TEBucks)
 
 @RequestMapping(path="/transfer", method = RequestMethod.GET)
 public List<Transfer> listUserTransfers() {
-	Transfer transfer = new Transfer(2, "String transferFrom", "String transferTo", "String transferType", "String transferStatus", BigDecimal.valueOf(1));
+	Transfer transfer = new Transfer(2, "String transferFrom", "String transferTo", "String transferType", 1, BigDecimal.valueOf(1));
 	List<Transfer> list = new ArrayList<>();
 	list.add(transfer);
 	
@@ -61,7 +61,7 @@ public List<Transfer> listUserTransfers() {
 @RequestMapping(path= "/transfer/{id}", method = RequestMethod.GET)
 public Transfer getTransferById(@PathVariable int id) {
 
-	Transfer transfer = new Transfer(1, "String transferFrom", "String transferTo", "String transferType", "String transferStatus", BigDecimal.valueOf(1));
+	Transfer transfer = new Transfer(1, "String transferFrom", "String transferTo", "String transferType", 1, BigDecimal.valueOf(1));
 	
 	return transfer;
 }
