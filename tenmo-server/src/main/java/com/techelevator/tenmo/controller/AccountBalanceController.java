@@ -2,6 +2,7 @@ package com.techelevator.tenmo.controller;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.AccountBalanceDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.AccountBalance;
+import com.techelevator.tenmo.model.User;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -32,4 +34,10 @@ public class AccountBalanceController {
 		return ab;
 
 	}
+
+	@RequestMapping(path = "/users", method = RequestMethod.GET)
+	public List<User> listOfUsers() {
+		return userDAO.findAll();
+	}
+
 }
