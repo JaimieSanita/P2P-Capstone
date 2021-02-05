@@ -1,9 +1,13 @@
 package com.techelevator.tenmo;
 
+import com.techelevator.tenmo.models.AccountBalance;
 import com.techelevator.tenmo.models.AuthenticatedUser;
+import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.UserCredentials;
+
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
+import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.view.ConsoleService;
 
 public class App {
@@ -25,7 +29,12 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
-
+    private TransferService transferService;
+    
+    
+    
+    
+    
     public static void main(String[] args) {
     	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
     	app.run();
@@ -34,6 +43,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     public App(ConsoleService console, AuthenticationService authenticationService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
+		this.transferService = new TransferService(API_BASE_URL);
+		
+		
+		
+		
 	}
 
 	public void run() {
@@ -68,13 +82,15 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
 		
+		//not sure how to figure this out
+		AccountBalance currentBalance = transferService.getBalance(0);
+		System.out.print(currentBalance);
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
+		Transfer[] transfers = transferService.listTransfers();
+		System.out.print(transfers);
 	}
 
 	private void viewPendingRequests() {
@@ -83,10 +99,10 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
-		//submenu: choose a user
-		//send an amount
-		// send transfer
+		
+		//not sure how to figure this out
+		Transfer transfer = transferService.sendBucks(null);
+		System.out.print(transfer);
 		
 		
 	}
@@ -138,11 +154,17 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private void login() {
 		System.out.println("Please log in");
 		currentUser = null;
+		
+		this.transferService.setCurrentUser(null);
 		while (currentUser == null) //will keep looping until user is logged in
 		{
 			UserCredentials credentials = collectUserCredentials();
 		    try {
+		    	//doing the login
 				currentUser = authenticationService.login(credentials);
+				//setting the current user onto our api service
+				
+				this.transferService.setCurrentUser(currentUser);
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: "+e.getMessage());
 				System.out.println("Please attempt to login again.");

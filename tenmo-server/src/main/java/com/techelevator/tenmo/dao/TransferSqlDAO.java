@@ -38,8 +38,6 @@ public class TransferSqlDAO implements TransferDAO {
 		BigDecimal transferAmount = transferRequest.getAmount();
 		int transferFrom = transferRequest.getTransferFrom();
 
-		//
-//		}
 		Connection con = this.jdbcTemplate.getDataSource().getConnection();
 		try {
 			con.setAutoCommit(false);

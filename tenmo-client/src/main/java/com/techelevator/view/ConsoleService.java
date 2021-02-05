@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import com.techelevator.tenmo.models.Transfer;
+
 public class ConsoleService {
 
 	private PrintWriter out;
@@ -73,4 +75,16 @@ public class ConsoleService {
 		} while(result == null);
 		return result;
 	}
+	
+	
+	public void printTransferDetails(Transfer transfer) {
+		out.println("-------------");
+		out.println(transfer.getTransferId());
+		out.println(transfer.getTransferFrom());
+	}
+	
+	//TODO printTransfer method that loops through transfers and prints them one by one-- returning a transfer array
+	
+	
+	
 }
