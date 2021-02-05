@@ -12,7 +12,7 @@ import com.techelevator.tenmo.model.TransferRequest;
 public interface TransferDAO {
 
 	
-	Transfer sendTransfer(TransferRequest transferRequest, int userId);
+	Transfer sendTransfer(TransferRequest transferRequest) throws Exception;
 	
 	List<Transfer> listTransfers(int userId);
 	

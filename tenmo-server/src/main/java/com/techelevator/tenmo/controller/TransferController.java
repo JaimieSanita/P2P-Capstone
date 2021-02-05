@@ -24,63 +24,50 @@ import com.techelevator.tenmo.model.User;
 @PreAuthorize("isAuthenticated()")
 @RestController
 public class TransferController {
-	
-private UserDAO userDAO;
-private TransferDAO transferDAO;
-private UserSqlDAO userSqlDAO;
 
+	private UserDAO userDAO;
+	private TransferDAO transferDAO;
+	private UserSqlDAO userSqlDAO;
 
+	public TransferController(TransferDAO transferDAO, UserDAO userDAO) {
+		this.userDAO = userDAO;
+		this.transferDAO = transferDAO;
+	}
 
-public TransferController(TransferDAO transferDAO, UserDAO userDAO) {
-	this.userDAO = userDAO;
-	this.transferDAO = transferDAO;
-}
+	@RequestMapping(path = "/transfer", method = RequestMethod.POST)
+	public Transfer sendTransfer(@RequestBody TransferRequest request, Principal principal) throws Exception {
+		String username = principal.getName();
+		int userId = this.userDAO.findIdByUsername(username);
+		if (userId != request.getTransferFrom()) {
+			// throw custom exception here
+			throw new Exception("You don't have permission to make this transfer");
+		}
 
+		return this.transferDAO.sendTransfer(request);
 
+	}
 
+	@RequestMapping(path = "/transfer", method = RequestMethod.GET)
+	public List<Transfer> listTransfers(Principal principal) {
 
-@RequestMapping(path = "/transfer", method = RequestMethod.POST)
-public Transfer sendTransfer(@RequestBody TransferRequest request, Principal principal) {
-	String username = principal.getName();
-	int userId = this.userDAO.findIdByUsername(username);
-	
-	//Transfer transfer2 = new Transfer(9999, request.getTransferFrom(), request.getTransferTo(), 7, 1, request.getAmount());
-	
-	return this.transferDAO.sendTransfer(request, userId);
-	
-}
+		String username = principal.getName();
+		int userId = this.userDAO.findIdByUsername(username);
 
+		return this.transferDAO.listTransfers(userId);
 
+	}
 
-@RequestMapping(path="/transfer", method = RequestMethod.GET)
-public List<Transfer> listTransfers(Principal principal) {
-	
-	String username = principal.getName();
-	int userId = this.userDAO.findIdByUsername(username);
-	
-	return this.transferDAO.listTransfers(userId);
+	@RequestMapping(path = "/transfer/{transferId}", method = RequestMethod.GET)
+	public Transfer getTransferById(@PathVariable int transferId) {
 
-}
+		return transferDAO.getTransferById(transferId);
 
-@RequestMapping(path= "/transfer/{transferId}", method = RequestMethod.GET)
-public Transfer getTransferById(@PathVariable int transferId, Principal principal) {
+		// Transfer transfer = new Transfer(1, 11,12,13, 1, BigDecimal.valueOf(1));
 
-	String username = principal.getName();
-	int userId = userDAO.findIdByUsername(username);
-	
-	return transferDAO.getTransferById(transferId);
-	
-	//Transfer transfer = new Transfer(1, 11,12,13, 1, BigDecimal.valueOf(1));
-	
-	//return transfer;
-}
-
+		// return transfer;
+	}
 
 //TODO transfersqlDAO
 //TODO accountBalanceSqlDAO
-
-
-
-
 
 }
