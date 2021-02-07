@@ -1,8 +1,11 @@
 package com.techelevator.tenmo;
 
+import java.math.BigDecimal;
+
 import com.techelevator.tenmo.models.AccountBalance;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
+import com.techelevator.tenmo.models.TransferRequest;
 import com.techelevator.tenmo.models.UserCredentials;
 
 import com.techelevator.tenmo.services.AuthenticationService;
@@ -82,15 +85,13 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
-		
-		//not sure how to figure this out
-		AccountBalance currentBalance = transferService.getBalance(0);
+		AccountBalance currentBalance = transferService.getBalance(currentUser.getUser().getId());
 		System.out.print(currentBalance);
 	}
 
 	private void viewTransferHistory() {
 		Transfer[] transfers = transferService.listTransfers();
-		System.out.print(transfers);
+		console.printViewTransfers(transfers, currentUser.getUser().getId());;
 	}
 
 	private void viewPendingRequests() {
@@ -99,9 +100,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void sendBucks() {
-		
+		TransferRequest request;
 		//not sure how to figure this out
-		Transfer transfer = transferService.sendBucks(null);
+		Transfer transfer = transferService.sendBucks(request);
 		System.out.print(transfer);
 		
 		

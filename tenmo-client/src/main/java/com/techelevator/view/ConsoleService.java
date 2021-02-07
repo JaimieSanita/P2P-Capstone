@@ -4,6 +4,7 @@ package com.techelevator.view;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 import com.techelevator.tenmo.models.AccountBalance;
@@ -14,7 +15,7 @@ public class ConsoleService {
 
 	private PrintWriter out;
 	private Scanner in;
-
+	
 	public ConsoleService(InputStream input, OutputStream output) {
 		this.out = new PrintWriter(output, true);
 		this.in = new Scanner(input);
@@ -90,23 +91,41 @@ public class ConsoleService {
 		out.println("-------------------------------------------");
 		//while loop
 		out.println("---------");
-		out.println("Enter " + transfer.getTransferId() + " of" + transfer.getTransferTo() + " you are sending to (0 to cancel) ");
+		out.println("Please enter " + transfer.getTransferId() + " of" + transfer.getTransferTo() + " you are sending to (0 to cancel): ");
 		out.println("Enter " + transfer.getTransferAmount());
 	}
 	
 	//Use Case 5
-	public void printViewTransfers(Transfer transfer) {
+	public void printViewTransfers(Transfer[] transfers, int currentUserId) {
 		out.println("-------------------------------------------");
+		out.println("Transfers");
+		out.println("ID/t/t/t " + "From//To/t/t/t/t/t " + " Amount");
+		out.println("-------------------------------------------");
+		//while loop to represent actual transfer amount
+		
+		int length = transfers.length;
+		int count = 0;
+
+		
+		
+		while(count < length) {
+			Transfer transfer = transfers[count];
+			if (transfer.getTransferFrom() == currentUserId) {
+							
+	//How to get the username using transferTo field in the transfer class? i.e. transfer.getTransferTo()
+			System.out.println(transfer.getTransferId() + "/t/t/t " + "To: ?" + "/t/t/t/t/t " + " Amount");
+																	//   ? ^
+			} else {
+				System.out.println(transfer.getTransferId() + "/t/t/t " + "From: ?" + "/t/t/t/t/t " + transfer.getTransferAmount());
+			}
+			count++;
+		}
+		
+
+		out.println("---------");
+		out.println("Please enter transfer ID to view details (0 to cancel): ");
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-
 	//Use Case 6
 	public void printTransferDetails(Transfer transfer) {
 		out.println("--------------------------------------------");
