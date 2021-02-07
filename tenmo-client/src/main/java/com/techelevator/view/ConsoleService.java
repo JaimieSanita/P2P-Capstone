@@ -9,16 +9,19 @@ import java.util.Scanner;
 
 import com.techelevator.tenmo.models.AccountBalance;
 import com.techelevator.tenmo.models.Transfer;
+import com.techelevator.tenmo.models.TransferRequest;
 import com.techelevator.tenmo.services.TransferService;
 
 public class ConsoleService {
 
 	private PrintWriter out;
 	private Scanner in;
+	private TransferService transferService;
 	
 	public ConsoleService(InputStream input, OutputStream output) {
 		this.out = new PrintWriter(output, true);
 		this.in = new Scanner(input);
+		
 	}
 
 	public Object getChoiceFromOptions(Object[] options) {
@@ -85,21 +88,28 @@ public class ConsoleService {
 	}
 	
 	//Use Case 4
-	public void printSendTEBucks(Transfer transfer) {
+	public void printSendTEBucks(TransferRequest transfer) {
 		out.println("-------------------------------------------");
-		out.println(transfer.getTransferId() + " Name");
+		out.println("Users");
+		out.println("ID\t\t\t" + " Name");
 		out.println("-------------------------------------------");
-		//while loop
+		//while(findAllUsers() != null) {
+			//Print each user
+			//getUserInput(String prompt)
+			//getUserInputInteger(String prompt)
+			
+		//}
 		out.println("---------");
-		out.println("Please enter " + transfer.getTransferId() + " of" + transfer.getTransferTo() + " you are sending to (0 to cancel): ");
-		out.println("Enter " + transfer.getTransferAmount());
-	}
+		out.println("---------");
+		out.println("Please enter transfer ID to view details (0 to cancel): ");
+	
+		}
 	
 	//Use Case 5
 	public void printViewTransfers(Transfer[] transfers, int currentUserId) {
 		out.println("-------------------------------------------");
 		out.println("Transfers");
-		out.println("ID/t/t/t " + "From//To/t/t/t/t/t " + " Amount");
+		out.println("ID\t\t\t "  + "From/To\t\t\t\t\t " + " Amount");
 		out.println("-------------------------------------------");
 		//while loop to represent actual transfer amount
 		
@@ -120,11 +130,11 @@ public class ConsoleService {
 			}
 			count++;
 		}
-		
+		//out.println("Please enter " + transfer.getTransferTo() + " of" + transfer.getTransferTo() + " you are sending to (0 to cancel): ");
+		//out.println("Enter " + transfer.getTransferAmount());
+	
 
-		out.println("---------");
-		out.println("Please enter transfer ID to view details (0 to cancel): ");
-	}
+		}
 	
 	//Use Case 6
 	public void printTransferDetails(Transfer transfer) {

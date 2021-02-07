@@ -13,10 +13,12 @@ import com.techelevator.tenmo.models.AccountBalance;
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.TransferRequest;
+import com.techelevator.tenmo.models.User;
 
 
 public class TransferService {
 	private String BASE_URL;
+	private int userId;
 
 	private RestTemplate restTemplate = new RestTemplate();
 	private AuthenticatedUser currentUser;
@@ -27,8 +29,9 @@ public class TransferService {
 		this.currentUser = currentUser;
 	}
 
-	public TransferService(String url) {
+	public TransferService(String url, int userId) {
 		this.BASE_URL = url;
+		this.userId = userId;
 
 	}
 
@@ -37,7 +40,7 @@ public class TransferService {
 	// no print lines here
 	//
 
-	public Transfer[] listTransfers() throws RestClientResponseException {
+	public Transfer[] listTransfers() throws TransferNotFoundException {
 		Transfer[] output = null;
 
 		try {
@@ -46,12 +49,12 @@ public class TransferService {
 
 			output = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, Transfer[].class).getBody();
 		} catch (RestClientResponseException ex) {
-			ex.printStackTrace();
+			throw new TransferNotFoundException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 		}
 		return output;
 	}
 
-	public Transfer getTransferById(int transferId) throws RestClientResponseException {
+	public Transfer getTransferById(int transferId) throws TransferNotFoundException {
 		Transfer transfer = null;
 
 		try {
@@ -60,13 +63,14 @@ public class TransferService {
 
 			transfer = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, Transfer.class).getBody();
 		} catch (RestClientResponseException ex) {
-			ex.printStackTrace();
+			throw new TransferNotFoundException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
+			
 		}
 
 		return transfer;
 	}
 
-	public Transfer sendBucks(TransferRequest request) throws RestClientResponseException {
+	public Transfer sendBucks(TransferRequest request) throws TransferNotFoundException {
 		Transfer transfer = null;
 
 		try {
@@ -76,22 +80,21 @@ public class TransferService {
 			transfer = restTemplate.exchange(BASE_URL + "transfer", HttpMethod.POST, entity, Transfer.class).getBody();
 
 		} catch (RestClientResponseException ex) {
-			ex.printStackTrace();
+			throw new TransferNotFoundException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 		}
 		return transfer;
 
 	}
 
-	public AccountBalance getBalance(int id) throws RestClientResponseException {
+	public AccountBalance getBalance(int userId)  {
 		AccountBalance balance = null;
 
 		try {
 			HttpEntity securityHeaders = makeAuthEntity();
-			String requestUrl = BASE_URL + "balance";
-			balance = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, AccountBalance.class)
-					.getBody();
+			String requestUrl = BASE_URL + "balance" + "/" + userId;
+			balance = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, AccountBalance.class).getBody();
 		} catch (RestClientResponseException ex) {
-			ex.printStackTrace();
+			System.out.println("Error gettting balance.");
 		}
 
 		return balance;
@@ -126,6 +129,26 @@ public class TransferService {
 		return transfer;
 
 	}
+	//Consider transferService Exceptions to be thrown after RestClient is caught
+	public User[] findAllUsers() {
+		User[] users = null;
+		try {
+			String requestUrl = BASE_URL + "users";
+			HttpEntity securityHeaders = makeAuthEntity();
+			users = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, User[].class).getBody();
+			
+		} catch (RestClientResponseException ex) {
+			System.out.println("We cannot show you all the users at this time.");
+		}
+		return users;
+	}
+	
+	
+	
+	
+	
+	
+	
 
 	//	private HttpEntity<AccountBalance> makeAccountBalanceEntity(AccountBalance accountBalance) {
 //		HttpHeaders headers = new HttpHeaders();

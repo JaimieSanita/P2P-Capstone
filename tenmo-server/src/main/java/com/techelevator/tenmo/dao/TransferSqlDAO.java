@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.techelevator.tenmo.model.AccountBalance;
 import com.techelevator.tenmo.model.Transfer;
+
 import com.techelevator.tenmo.model.TransferRequest;
 
 @Component
@@ -40,6 +41,7 @@ public class TransferSqlDAO implements TransferDAO {
 
 		Connection con = this.jdbcTemplate.getDataSource().getConnection();
 		try {
+			
 			con.setAutoCommit(false);
 			AccountBalance accountBalance = accountBalanceDAO.getBalance(transferFrom);
 			BigDecimal currentBalance = accountBalance.getBalance();
