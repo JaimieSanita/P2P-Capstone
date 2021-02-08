@@ -116,8 +116,20 @@ public class App {
 		User[] user;
 		user = this.transferService.findAllUsers();
 		this.console.printUsers(user);
-		this.console.getUserInputInteger("accountTo");
-		
+		int userTo = this.console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel): ");
+		int transferAmount = this.console.getUserInputInteger("Enter amount: ");
+		BigDecimal newAmount = BigDecimal.valueOf(transferAmount);
+		TransferRequest request = new TransferRequest();
+		request.setAmount(newAmount);
+		request.setTransferTo(userTo);
+		request.setTransferFrom(this.currentUser.getUser().getId());
+		Transfer transfer;
+		try {
+			transfer = this.transferService.sendBucks(request);
+		} catch (TransferNotFoundException e) {
+			
+			e.printStackTrace();
+		}
 		
 		
 		
