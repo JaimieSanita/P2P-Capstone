@@ -102,3 +102,9 @@ INSERT INTO accounts (user_id,balance) VALUES (2,1000);
 
 
 COMMIT TRANSACTION;
+SELECT*FROM transfers;
+START TRANSACTION;
+INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (2, 2, 3, 4, 100);
+SELECT*FROM transfers;
+COMMIT;
+SELECT*FROM transfers;

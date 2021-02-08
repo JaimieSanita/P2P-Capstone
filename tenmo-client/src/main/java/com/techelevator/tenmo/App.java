@@ -98,6 +98,7 @@ public class App {
 		Transfer[] transfers;
 		try {
 			transfers = transferService.listTransfers();
+			this.console.printTransfers(transfers);
 		} catch (TransferNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,13 +113,10 @@ public class App {
 	}
 
 	private void sendBucks() {
-		TransferRequest request = new TransferRequest();
-		// not sure how to figure this out
-		// Transfer transfer = transferService.sendBucks(request);
-		// System.out.print(transfer);
-		// TODO Show a list of users
-		this.console.printSendTEBucks(request);
-		this.transferService.findAllUsers();
+		User[] user;
+		user = this.transferService.findAllUsers();
+		this.console.printUsers(user);
+		this.console.getUserInputInteger("accountTo");
 		
 		
 		

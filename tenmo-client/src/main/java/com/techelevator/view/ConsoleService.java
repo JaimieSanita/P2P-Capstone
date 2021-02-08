@@ -10,6 +10,7 @@ import java.util.Scanner;
 import com.techelevator.tenmo.models.AccountBalance;
 import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.TransferRequest;
+import com.techelevator.tenmo.models.User;
 import com.techelevator.tenmo.services.TransferService;
 
 public class ConsoleService {
@@ -151,6 +152,29 @@ public class ConsoleService {
 	
 	//TODO printTransfer method that loops through transfers and prints them one by one-- returning a transfer array
 	
+	public void printTransfers(Transfer[] transfers) {
+		if(transfers != null) {
+			out.println("--------------------------------------------");
+			out.println("Transfers");
+			out.println("ID\t\t\t "  + "From/To\t\t\t\t\t " + " Amount");
+			out.println("-------------------------------------------");
+			for(Transfer transfer : transfers) {
+				out.println(transfer.getTransferId() + "\t\t" + transfer.getTransferFrom() + "\t\t" + transfer.getTransferAmount());
+			}
+		}
+	}
+		public void printUsers(User[] user) {
+			out.println("-------------------------------------------");
+			out.println("-------------------------------------------");
+			out.println("Users");
+			out.println("ID\t\t\t" + " Name");
+			out.println("-------------------------------------------");
+			for(User users : user) {
+				out.println(users.getId() + "\t\t\t" + users.getUsername());
+			}
+			
+		
+		}
+	}
 	
-	
-}
+
