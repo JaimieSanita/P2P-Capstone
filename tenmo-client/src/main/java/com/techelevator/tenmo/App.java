@@ -48,7 +48,7 @@ public class App {
 	public App(ConsoleService console, AuthenticationService authenticationService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
-		this.transferService = new TransferService(API_BASE_URL, userId);
+		this.transferService = new TransferService(API_BASE_URL);
 		this.currentUser = currentUser;
 
 	}
@@ -66,7 +66,7 @@ public class App {
 		while (true) {
 			String choice = (String) console.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 			if (MAIN_MENU_OPTION_VIEW_BALANCE.equals(choice)) {
-				viewCurrentBalance(userId);
+				viewCurrentBalance();
 			} else if (MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS.equals(choice)) {
 				viewTransferHistory();
 			} else if (MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS.equals(choice)) {
@@ -84,10 +84,10 @@ public class App {
 		}
 	}
 
-	private void viewCurrentBalance(int userId) {
-		TransferService ts = new TransferService(API_BASE_URL, userId);
+	private void viewCurrentBalance() {
+		
 		try {
-			console.printCurrentAccountBalance(ts.getBalance(userId));
+			console.printCurrentAccountBalance(this.transferService.getBalance());
 		} catch (NullPointerException e) {
 			System.out.println("Account balance can not be accessed.");
 		}

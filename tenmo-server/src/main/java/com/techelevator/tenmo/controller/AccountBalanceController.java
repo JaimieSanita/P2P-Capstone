@@ -26,6 +26,13 @@ public class AccountBalanceController {
 		this.accountBalanceDAO = accountBalanceDAO;
 		this.userDAO = userDAO;
 	}
+	
+	@RequestMapping(path = "/balance", method = RequestMethod.GET)
+	public AccountBalance getMyBalance(Principal principal) {
+		String username = principal.getName();
+		int userId = this.userDAO.findIdByUsername(username);
+		return this.accountBalanceDAO.getBalance(userId);
+	}
 
 	@RequestMapping(path = "/balance/{id}", method = RequestMethod.GET)
 	public AccountBalance getBalance(@PathVariable int id) {

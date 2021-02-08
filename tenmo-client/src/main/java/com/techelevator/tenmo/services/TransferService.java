@@ -18,7 +18,7 @@ import com.techelevator.tenmo.models.User;
 
 public class TransferService {
 	private String BASE_URL;
-	private int userId;
+	
 
 	private RestTemplate restTemplate = new RestTemplate();
 	private AuthenticatedUser currentUser;
@@ -29,9 +29,9 @@ public class TransferService {
 		this.currentUser = currentUser;
 	}
 
-	public TransferService(String url, int userId) {
+	public TransferService(String url) {
 		this.BASE_URL = url;
-		this.userId = userId;
+		
 
 	}
 
@@ -49,7 +49,10 @@ public class TransferService {
 
 			output = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, Transfer[].class).getBody();
 		} catch (RestClientResponseException ex) {
+			if(ex.getRawStatusCode() == 404) {
 			throw new TransferNotFoundException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
+		}
+			throw ex;
 		}
 		return output;
 	}
@@ -86,12 +89,12 @@ public class TransferService {
 
 	}
 
-	public AccountBalance getBalance(int userId)  {
+	public AccountBalance getBalance()  {
 		AccountBalance balance = null;
 
 		try {
 			HttpEntity securityHeaders = makeAuthEntity();
-			String requestUrl = BASE_URL + "balance" + "/" + userId;
+			String requestUrl = BASE_URL + "balance";
 			balance = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, AccountBalance.class).getBody();
 		} catch (RestClientResponseException ex) {
 			System.out.println("Error gettting balance.");
