@@ -101,13 +101,13 @@ public class App {
 			e.printStackTrace();
 		}
 	}
-
+	
 	private void sendBucks() {
 		User[] user;
 		user = this.transferService.findAllUsers();
 		this.console.printUsers(user);
 		int userTo = this.console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel) ");
-		int transferAmount = this.console.getUserInputInteger("Enter amount: ");
+		int transferAmount = this.console.getUserInputInteger("Enter amount ");
 		BigDecimal newAmount = BigDecimal.valueOf(transferAmount);
 		//if(negative and >accountBalance)
 		TransferRequest request = new TransferRequest();

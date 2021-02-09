@@ -90,42 +90,11 @@ public class ConsoleService {
 		return result;
 	}
 
-	// Use Case 3
+
 	public void printCurrentAccountBalance(AccountBalance accountBalance) {
 		out.println("Your current account balance is: " + accountBalance.getBalance());
 	}
 
-
-	// Use Case 6
-	public void printTransferDetails(Transfer transfer) {
-		out.println("--------------------------------------------");
-		out.println("Transfer Details");
-		out.println("--------------------------------------------");
-		out.println(transfer.getTransferId());
-		out.println(transfer.getTransferFrom());
-		out.println(transfer.getTransferTo());
-		out.println(transfer.getTransferType());
-		out.println(transfer.getTransferStatus());
-		out.println(transfer.getTransferAmount());
-	}
-
-	// TODO printTransfer method that loops through transfers and prints them one by
-	// one-- returning a transfer array
-
-	public void printTransfers(Transfer[] transfers) {
-		if (transfers != null) {
-			out.println("------------------------------------------------");
-			out.println("Transfers");
-			out.println("ID\t\t " + "From/To\t\t " + " Amount");
-			out.println("------------------------------------------------");
-			for (Transfer transfer : transfers) {
-				out.println(transfer.getTransferId() + "\t\t" + "From: " + transfer.getTransferFrom() + "\t\t $"
-						+ transfer.getTransferAmount());
-
-			}
-		}
-	}
-	
 	public void printTransfersBetter(Transfer[] transfers) {
 		if (transfers != null) {
 			out.println("------------------------------------------------");
@@ -138,9 +107,9 @@ public class ConsoleService {
 				if(this.currentUser.getUser().getId() == transfer.getTransferFrom()) {
 					fromOrTo = "From: ";
 					name = transfer.getTransferFrom();
-				} if(this.currentUser.getUser().getId() == transfer.getTransferTo()) {
+				} if(this.currentUser.getUser().getId() == transfer.getTransferTo()) { //this is not working properly; may be due to setting in sendBucks
 					fromOrTo = "To: ";
-					name = transfer.getTransferTo();
+					name = transfer.getTransferTo(); 
 				}
 				out.println(transfer.getTransferId() + "\t\t" + fromOrTo + name + "\t\t$" + transfer.getTransferAmount());
 			}
@@ -151,22 +120,22 @@ public class ConsoleService {
 				out.println("--------------------------------------------");
 				out.println("Transfer Details");
 				out.println("--------------------------------------------");
-				out.println("ID:" + transfer.getTransferId());
-				out.println("From: " + transfer.getTransferFrom());
-				out.println("To: " + transfer.getTransferTo());
+				out.println("ID:  " + transfer.getTransferId()); //need to print username
+				out.println("From:  " + transfer.getTransferFrom()); //need to print username
+				out.println("To:  " + transfer.getTransferTo());
 				if(transfer.getTransferType() == 2) {
-					out.println("Type: Send");
+					out.println("Type:  Send");
 				} else {
-					out.println("Type: Request");
+					out.println("Type:  Request");
 				}
 				if(transfer.getTransferStatus() == 2) {
-					out.println("Status: Approved");
+					out.println("Status:  Approved");
 				} else if (transfer.getTransferStatus() == 1) {
-					out.println("Status: Pending");
+					out.println("Status:  Pending");
 				} else {
-					out.println("Status: Rejected");
+					out.println("Status:  Rejected");
 				}
-				out.println("Amount" + transfer.getTransferAmount());
+				out.println("Amount:  " + transfer.getTransferAmount());
 			}
 			}
 		}
@@ -182,4 +151,25 @@ public class ConsoleService {
 		}
 
 	}
+	/*
+	public void promptSendBucks(TransferS request) {
+		User[] user;
+		user = this.transferService.findAllUsers();
+		printUsers(user);
+		int userTo = getUserInputInteger("Enter ID of user you are sending to (0 to cancel) ");
+		if(userTo == this.currentUser.getUser().getId()) {
+			out.println("You cannot send a transfer to yourself. Please enter a different user>>>");
+		}
+		int transferAmount = getUserInputInteger("Enter amount ");
+		BigDecimal newAmount = BigDecimal.valueOf(transferAmount);
+		while(newAmount.compareTo(BigDecimal.ZERO) == -1) {
+			out.println("You cannot send a negative amount. Please re-enter>>>");
+		}
+		//if(negative and >accountBalance)
+		request.setTransferAmount(newAmount);
+		request.setTransferTo(userTo);
+		request.setTransferFrom(this.currentUser.getUser().getId());
+		Transfer transfer;
+	}
+	*/
 }
