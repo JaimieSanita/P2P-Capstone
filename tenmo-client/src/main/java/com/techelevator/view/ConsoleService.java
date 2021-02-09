@@ -145,6 +145,30 @@ public class ConsoleService {
 				out.println(transfer.getTransferId() + "\t\t" + fromOrTo + name + "\t\t$" + transfer.getTransferAmount());
 			}
 			out.println("---------");
+			int transferSelection = getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
+			for(Transfer transfer : transfers) {
+			if(transferSelection == transfer.getTransferId()) {
+				out.println("--------------------------------------------");
+				out.println("Transfer Details");
+				out.println("--------------------------------------------");
+				out.println("ID:" + transfer.getTransferId());
+				out.println("From: " + transfer.getTransferFrom());
+				out.println("To: " + transfer.getTransferTo());
+				if(transfer.getTransferType() == 2) {
+					out.println("Type: Send");
+				} else {
+					out.println("Type: Request");
+				}
+				if(transfer.getTransferStatus() == 2) {
+					out.println("Status: Approved");
+				} else if (transfer.getTransferStatus() == 1) {
+					out.println("Status: Pending");
+				} else {
+					out.println("Status: Rejected");
+				}
+				out.println("Amount" + transfer.getTransferAmount());
+			}
+			}
 		}
 	}
 

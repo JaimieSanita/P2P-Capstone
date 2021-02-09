@@ -96,7 +96,7 @@ public class App {
 		try {
 			transfers = transferService.listTransfers();
 			this.console.printTransfersBetter(transfers);
-			int transferSelection = console.getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
+			
 		} catch (TransferNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -109,6 +109,7 @@ public class App {
 		int userTo = this.console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel) ");
 		int transferAmount = this.console.getUserInputInteger("Enter amount: ");
 		BigDecimal newAmount = BigDecimal.valueOf(transferAmount);
+		//if(negative and >accountBalance)
 		TransferRequest request = new TransferRequest();
 		request.setAmount(newAmount);
 		request.setTransferTo(userTo);
