@@ -38,7 +38,6 @@ public class App {
 	private ConsoleService console;
 	private AuthenticationService authenticationService;
 	private TransferService transferService;
-	private int userId;
 
 	public static void main(String[] args) {
 		App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
@@ -49,8 +48,6 @@ public class App {
 		this.console = console;
 		this.authenticationService = authenticationService;
 		this.transferService = new TransferService(API_BASE_URL);
-		this.currentUser = currentUser;
-
 	}
 
 	public void run() {
@@ -98,25 +95,18 @@ public class App {
 		Transfer[] transfers;
 		try {
 			transfers = transferService.listTransfers();
-			this.console.printTransfers(transfers);
+			this.console.printTransfersBetter(transfers);
+			int transferSelection = console.getUserInputInteger("Please enter transfer ID to view details (0 to cancel)");
 		} catch (TransferNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// System.out.print(transfers);
-		// console.printViewTransfers(transfers, currentUser.getUser().getId());
-	}
-
-	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void sendBucks() {
 		User[] user;
 		user = this.transferService.findAllUsers();
 		this.console.printUsers(user);
-		int userTo = this.console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel): ");
+		int userTo = this.console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel) ");
 		int transferAmount = this.console.getUserInputInteger("Enter amount: ");
 		BigDecimal newAmount = BigDecimal.valueOf(transferAmount);
 		TransferRequest request = new TransferRequest();
@@ -126,22 +116,14 @@ public class App {
 		Transfer transfer;
 		try {
 			transfer = this.transferService.sendBucks(request);
+			System.out.println("Your transfer is complete.");
 		} catch (TransferNotFoundException e) {
-			
-			e.printStackTrace();
+				e.printStackTrace();
 		}
-		
-		
-		
-		// Conditional can't send to yourself, take id from userInput
-		// Ask amount they want to transfer and use int method above
-		// TODO Need to do same conditionals as servers
-		// AccountTo cannot equal AccountFrom
-		// the transfer amount <= account from balance
-		// Cannot send a negative amount
-		// Do addToBalance for AccountTo and AccountFrom
-		// need to include add and subtract to client side
-		//
+	}
+	private void viewPendingRequests() {
+		// TODO Auto-generated method stub
+
 	}
 
 	private void requestBucks() {
@@ -202,6 +184,7 @@ public class App {
 				// setting the current user onto our api service
 
 				this.transferService.setCurrentUser(currentUser);
+				this.console.setCurrentUser(currentUser);
 			} catch (AuthenticationServiceException e) {
 				System.out.println("LOGIN ERROR: " + e.getMessage());
 				System.out.println("Please attempt to login again.");

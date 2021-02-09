@@ -1,6 +1,5 @@
 package com.techelevator.view;
 
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -8,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 
 import com.techelevator.tenmo.models.AccountBalance;
+import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Transfer;
 import com.techelevator.tenmo.models.TransferRequest;
 import com.techelevator.tenmo.models.User;
@@ -18,11 +18,16 @@ public class ConsoleService {
 	private PrintWriter out;
 	private Scanner in;
 	private TransferService transferService;
-	
+	private AuthenticatedUser currentUser;
+
 	public ConsoleService(InputStream input, OutputStream output) {
 		this.out = new PrintWriter(output, true);
 		this.in = new Scanner(input);
-		
+
+	}
+	
+	public void setCurrentUser(AuthenticatedUser currentUser) {
+		this.currentUser = currentUser;
 	}
 
 	public Object getChoiceFromOptions(Object[] options) {
@@ -44,10 +49,12 @@ public class ConsoleService {
 				choice = options[selectedOption - 1];
 			}
 		} catch (NumberFormatException e) {
-			// eat the exception, an error message will be displayed below since choice will be null
+			// eat the exception, an error message will be displayed below since choice will
+			// be null
 		}
 		if (choice == null) {
-			out.println(System.lineSeparator() + "*** " + userInput + " is not a valid option ***" + System.lineSeparator());
+			out.println(System.lineSeparator() + "*** " + userInput + " is not a valid option ***"
+					+ System.lineSeparator());
 		}
 		return choice;
 	}
@@ -63,7 +70,7 @@ public class ConsoleService {
 	}
 
 	public String getUserInput(String prompt) {
-		out.print(prompt+": ");
+		out.print(prompt + ": ");
 		out.flush();
 		return in.nextLine();
 	}
@@ -71,73 +78,25 @@ public class ConsoleService {
 	public Integer getUserInputInteger(String prompt) {
 		Integer result = null;
 		do {
-			out.print(prompt+": ");
+			out.print(prompt + ": ");
 			out.flush();
 			String userInput = in.nextLine();
 			try {
 				result = Integer.parseInt(userInput);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				out.println(System.lineSeparator() + "*** " + userInput + " is not valid ***" + System.lineSeparator());
 			}
-		} while(result == null);
+		} while (result == null);
 		return result;
 	}
-	
-	//Use Case 3
+
+	// Use Case 3
 	public void printCurrentAccountBalance(AccountBalance accountBalance) {
 		out.println("Your current account balance is: " + accountBalance.getBalance());
 	}
-	
-	//Use Case 4
-	public void printSendTEBucks(TransferRequest transfer) {
-		out.println("-------------------------------------------");
-		out.println("Users");
-		out.println("ID\t\t\t" + " Name");
-		out.println("-------------------------------------------");
-		//while(findAllUsers() != null) {
-			//Print each user
-			//getUserInput(String prompt)
-			//getUserInputInteger(String prompt)
-			
-		//}
-		out.println("---------");
-		out.println("---------");
-		out.println("Please enter transfer ID to view details (0 to cancel): ");
-	
-		}
-	
-	//Use Case 5
-	public void printViewTransfers(Transfer[] transfers, int currentUserId) {
-		out.println("-------------------------------------------");
-		out.println("Transfers");
-		out.println("ID\t\t\t "  + "From/To\t\t\t\t\t " + " Amount");
-		out.println("-------------------------------------------");
-		//while loop to represent actual transfer amount
-		
-		int length = transfers.length;
-		int count = 0;
 
-		
-		
-		while(count < length) {
-			Transfer transfer = transfers[count];
-			if (transfer.getTransferFrom() == currentUserId) {
-							
-	//How to get the username using transferTo field in the transfer class? i.e. transfer.getTransferTo()
-			System.out.println(transfer.getTransferId() + "/t/t/t " + "To: ?" + "/t/t/t/t/t " + " Amount");
-																	//   ? ^
-			} else {
-				System.out.println(transfer.getTransferId() + "/t/t/t " + "From: ?" + "/t/t/t/t/t " + transfer.getTransferAmount());
-			}
-			count++;
-		}
-		//out.println("Please enter " + transfer.getTransferTo() + " of" + transfer.getTransferTo() + " you are sending to (0 to cancel): ");
-		//out.println("Enter " + transfer.getTransferAmount());
-	
 
-		}
-	
-	//Use Case 6
+	// Use Case 6
 	public void printTransferDetails(Transfer transfer) {
 		out.println("--------------------------------------------");
 		out.println("Transfer Details");
@@ -149,32 +108,54 @@ public class ConsoleService {
 		out.println(transfer.getTransferStatus());
 		out.println(transfer.getTransferAmount());
 	}
-	
-	//TODO printTransfer method that loops through transfers and prints them one by one-- returning a transfer array
-	
-	public void printTransfers(Transfer[] transfers) {
-		if(transfers != null) {
-			out.println("--------------------------------------------");
-			out.println("Transfers");
-			out.println("ID\t\t\t "  + "From/To\t\t\t\t\t " + " Amount");
-			out.println("-------------------------------------------");
-			for(Transfer transfer : transfers) {
-				out.println(transfer.getTransferId() + "\t\t" + transfer.getTransferFrom() + "\t\t" + transfer.getTransferAmount());
-			}
-		}
-	}
-		public void printUsers(User[] user) {
-			out.println("-------------------------------------------");
-			out.println("-------------------------------------------");
-			out.println("Users");
-			out.println("ID\t\t\t" + " Name");
-			out.println("-------------------------------------------");
-			for(User users : user) {
-				out.println(users.getId() + "\t\t\t" + users.getUsername());
-			}
-			
-		
-		}
-	}
-	
 
+	// TODO printTransfer method that loops through transfers and prints them one by
+	// one-- returning a transfer array
+
+	public void printTransfers(Transfer[] transfers) {
+		if (transfers != null) {
+			out.println("------------------------------------------------");
+			out.println("Transfers");
+			out.println("ID\t\t " + "From/To\t\t " + " Amount");
+			out.println("------------------------------------------------");
+			for (Transfer transfer : transfers) {
+				out.println(transfer.getTransferId() + "\t\t" + "From: " + transfer.getTransferFrom() + "\t\t $"
+						+ transfer.getTransferAmount());
+
+			}
+		}
+	}
+	
+	public void printTransfersBetter(Transfer[] transfers) {
+		if (transfers != null) {
+			out.println("------------------------------------------------");
+			out.println("Transfers");
+			out.println("ID\t\t " + "From/To\t\t " + " Amount");
+			out.println("------------------------------------------------");
+			String fromOrTo = "";
+			int name = 0;
+			for (Transfer transfer : transfers) {
+				if(this.currentUser.getUser().getId() == transfer.getTransferFrom()) {
+					fromOrTo = "From: ";
+					name = transfer.getTransferFrom();
+				} if(this.currentUser.getUser().getId() == transfer.getTransferTo()) {
+					fromOrTo = "To: ";
+					name = transfer.getTransferTo();
+				}
+				out.println(transfer.getTransferId() + "\t\t" + fromOrTo + name + "\t\t$" + transfer.getTransferAmount());
+			}
+			out.println("---------");
+		}
+	}
+
+	public void printUsers(User[] user) {
+		out.println("-------------------------------------------");
+		out.println("Users");
+		out.println("ID\t\t\t" + " Name");
+		out.println("-------------------------------------------");
+		for (User users : user) {
+			out.println(users.getId() + "\t\t\t" + users.getUsername());
+		}
+
+	}
+}
