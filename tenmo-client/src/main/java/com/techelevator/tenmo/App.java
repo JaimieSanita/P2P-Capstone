@@ -69,7 +69,7 @@ public class App {
 			} else if (MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS.equals(choice)) {
 				viewPendingRequests();
 			} else if (MAIN_MENU_OPTION_SEND_BUCKS.equals(choice)) {
-				sendBucks();
+				sendBucksBetter();
 			} else if (MAIN_MENU_OPTION_REQUEST_BUCKS.equals(choice)) {
 				requestBucks();
 			} else if (MAIN_MENU_OPTION_LOGIN.equals(choice)) {
@@ -99,6 +99,16 @@ public class App {
 			
 		} catch (TransferNotFoundException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void sendBucksBetter() {
+		TransferRequest request = this.console.promptSendBucks();
+		Transfer transfer;
+		try {
+			transfer = this.transferService.sendBucks(request);
+		} catch (TransferNotFoundException e) {
+				e.printStackTrace();
 		}
 	}
 	

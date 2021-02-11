@@ -151,8 +151,8 @@ public class ConsoleService {
 		}
 
 	}
-	/*
-	public void promptSendBucks(TransferS request) {
+	
+	public TransferRequest promptSendBucks() {
 		User[] user;
 		user = this.transferService.findAllUsers();
 		printUsers(user);
@@ -165,11 +165,20 @@ public class ConsoleService {
 		while(newAmount.compareTo(BigDecimal.ZERO) == -1) {
 			out.println("You cannot send a negative amount. Please re-enter>>>");
 		}
-		//if(negative and >accountBalance)
-		request.setTransferAmount(newAmount);
+		TransferRequest request = new TransferRequest();
+		request.setAmount(newAmount);
 		request.setTransferTo(userTo);
 		request.setTransferFrom(this.currentUser.getUser().getId());
-		Transfer transfer;
+		
+		//if(negative and >accountBalance)
+		return request;
+
 	}
-	*/
-}
+	}
+/*
+TransferRequest request = new TransferRequest();
+request.setAmount(newAmount);
+request.setTransferTo(userTo);
+request.setTransferFrom(this.currentUser.getUser().getId());
+*/	
+
