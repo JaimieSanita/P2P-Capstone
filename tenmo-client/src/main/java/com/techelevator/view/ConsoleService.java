@@ -157,24 +157,24 @@ public class ConsoleService {
 
 	public int promptForUserID(User[] users) {
 		int currentUserID = -9;
-		while(currentUserID < 0) {
+		while (currentUserID < 0) {
 			currentUserID = getUserInputInteger("Enter ID of user you are sending to (0 to cancel) ");
-			if(currentUserID == 0) {
+			if (currentUserID == 0) {
 				break;
 			} else {
-				for(User user: users) {
-					if(currentUserID == user.getId()) {
+				for (User user : users) {
+					if (currentUserID == user.getId()) {
 						return currentUserID;
 					}
 				}
 				currentUserID = -9;
 			}
-		} 
-		
+		}
+
 		return currentUserID;
-		
+
 	}
-	
+
 	public TransferRequest promptSendBucks() {
 		User[] user;
 		user = this.transferService.findAllUsers();

@@ -41,7 +41,7 @@ public class TransferSqlDAO implements TransferDAO {
 
 		Connection con = this.jdbcTemplate.getDataSource().getConnection();
 		try {
-			
+
 			con.setAutoCommit(false);
 			AccountBalance accountBalance = accountBalanceDAO.getBalance(transferFrom);
 			BigDecimal currentBalance = accountBalance.getBalance();
@@ -76,7 +76,8 @@ public class TransferSqlDAO implements TransferDAO {
 	public List<Transfer> listTransfers(int userId) {
 		List<Transfer> approvedTransfers = new ArrayList<>();
 		String query = "SELECT * " + "FROM users AS u " + "JOIN accounts AS a ON u.user_id = a.user_id "
-				+ "JOIN transfers AS t ON a.account_id = t.account_from OR a.account_id = t.account_to " + "WHERE u.user_id = ?";
+				+ "JOIN transfers AS t ON a.account_id = t.account_from OR a.account_id = t.account_to "
+				+ "WHERE u.user_id = ?";
 
 		SqlRowSet results = jdbcTemplate.queryForRowSet(query, userId);
 		while (results.next()) {
