@@ -69,7 +69,7 @@ public class App {
 			} else if (MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS.equals(choice)) {
 				viewPendingRequests();
 			} else if (MAIN_MENU_OPTION_SEND_BUCKS.equals(choice)) {
-				sendBucksBetter();
+				sendBucks();
 			} else if (MAIN_MENU_OPTION_REQUEST_BUCKS.equals(choice)) {
 				requestBucks();
 			} else if (MAIN_MENU_OPTION_LOGIN.equals(choice)) {
@@ -82,7 +82,7 @@ public class App {
 	}
 
 	private void viewCurrentBalance() {
-		
+
 		try {
 			console.printCurrentAccountBalance(this.transferService.getBalance());
 		} catch (NullPointerException e) {
@@ -96,42 +96,44 @@ public class App {
 		try {
 			transfers = transferService.listTransfers();
 			this.console.printTransfersBetter(transfers);
-			
+
 		} catch (TransferNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private void sendBucksBetter() {
-		TransferRequest request = this.console.promptSendBucks();
-		Transfer transfer;
-		try {
-			transfer = this.transferService.sendBucks(request);
-		} catch (TransferNotFoundException e) {
-				e.printStackTrace();
-		}
-	}
-	
+
 	private void sendBucks() {
-		User[] user;
-		user = this.transferService.findAllUsers();
-		this.console.printUsers(user);
-		int userTo = this.console.getUserInputInteger("Enter ID of user you are sending to (0 to cancel) ");
+		User[] users;
+		users = this.transferService.findAllUsers();
+		this.console.printUsers(users);
+		int userID = -1;
+		do {
+			userID = this.console.promptForUserID(users);
+			if (userID == this.currentUser.getUser().getId()) {
+				System.out.println("You cannot send money to yourself."); // generic printer
+			}
+		} while (!(userID == 0 || userID != this.currentUser.getUser().getId()));
+		if (userID == 0) {
+			return;
+		}
+
 		int transferAmount = this.console.getUserInputInteger("Enter amount ");
 		BigDecimal newAmount = BigDecimal.valueOf(transferAmount);
-		//if(negative and >accountBalance)
+		// if(negative and >accountBalance)
 		TransferRequest request = new TransferRequest();
 		request.setAmount(newAmount);
-		request.setTransferTo(userTo);
+		request.setTransferTo(userID);
 		request.setTransferFrom(this.currentUser.getUser().getId());
 		Transfer transfer;
 		try {
 			transfer = this.transferService.sendBucks(request);
 			System.out.println("Your transfer is complete.");
 		} catch (TransferNotFoundException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
+
 	}
+
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
 
