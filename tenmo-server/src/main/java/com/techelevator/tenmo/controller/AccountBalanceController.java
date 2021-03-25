@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.AccountBalanceDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.AccountBalance;
+import com.techelevator.tenmo.model.AccountNotFoundException;
 import com.techelevator.tenmo.model.User;
+import com.techelevator.tenmo.model.UserNotFoundException;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
@@ -28,14 +30,14 @@ public class AccountBalanceController {
 	}
 
 	@RequestMapping(path = "/balance", method = RequestMethod.GET)
-	public AccountBalance getMyBalance(Principal principal) {
+	public AccountBalance getMyBalance(Principal principal)  throws AccountNotFoundException, UserNotFoundException{
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
 		return this.accountBalanceDAO.getBalance(userId);
 	}
 
 	@RequestMapping(path = "/balance/{id}", method = RequestMethod.GET)
-	public AccountBalance getBalance(@PathVariable int id) {
+	public AccountBalance getBalance(@PathVariable int id) throws AccountNotFoundException{
 
 		AccountBalance ab = accountBalanceDAO.getBalance(id);
 		return ab;

@@ -11,7 +11,7 @@ import com.techelevator.tenmo.models.UserCredentials;
 import com.techelevator.tenmo.services.AccountNotFoundException;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.AuthenticationServiceException;
-import com.techelevator.tenmo.services.TransferNotFoundException;
+import com.techelevator.tenmo.services.TransferServiceException;
 import com.techelevator.tenmo.services.TransferService;
 import com.techelevator.view.ConsoleService;
 
@@ -39,7 +39,7 @@ public class App {
 	private AuthenticationService authenticationService;
 	private TransferService transferService;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TransferServiceException {
 		App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
 		app.run();
 	}
@@ -50,7 +50,7 @@ public class App {
 		this.transferService = new TransferService(API_BASE_URL);
 	}
 
-	public void run() {
+	public void run() throws TransferServiceException {
 		System.out.println("*********************");
 		System.out.println("* Welcome to TEnmo! *");
 		System.out.println("*********************");
@@ -59,7 +59,7 @@ public class App {
 		mainMenu();
 	}
 
-	private void mainMenu() {
+	private void mainMenu() throws TransferServiceException {
 		while (true) {
 			String choice = (String) console.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 			if (MAIN_MENU_OPTION_VIEW_BALANCE.equals(choice)) {
@@ -80,7 +80,7 @@ public class App {
 		}
 	}
 
-	private void viewCurrentBalance() {
+	private void viewCurrentBalance() throws TransferServiceException {
 
 		try {
 			console.printCurrentAccountBalance(this.transferService.getBalance());
@@ -96,12 +96,12 @@ public class App {
 			transfers = transferService.listTransfers();
 			this.console.printTransfersBetter(transfers);
 
-		} catch (TransferNotFoundException e) {
+		} catch (TransferServiceException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void sendBucks() {
+	private void sendBucks() throws TransferServiceException {
 		User[] users;
 		users = this.transferService.findAllUsers();
 		this.console.printUsers(users);
@@ -133,7 +133,7 @@ public class App {
 				transfer = this.transferService.sendBucks(request);
 				System.out.println("Your transfer is complete!");
 
-			} catch (TransferNotFoundException e) {
+			} catch (TransferServiceException e) {
 				e.printStackTrace();
 			}
 		}

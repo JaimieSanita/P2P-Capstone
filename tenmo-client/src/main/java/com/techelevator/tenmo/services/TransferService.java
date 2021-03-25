@@ -28,7 +28,7 @@ public class TransferService {
 
 	}
 
-	public Transfer[] listTransfers() throws TransferNotFoundException {
+	public Transfer[] listTransfers() throws TransferServiceException {
 		Transfer[] output = null;
 
 		try {
@@ -38,14 +38,14 @@ public class TransferService {
 			output = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, Transfer[].class).getBody();
 		} catch (RestClientResponseException ex) {
 			if (ex.getRawStatusCode() == 404) {
-				throw new TransferNotFoundException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
+				throw new TransferServiceException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 			}
 			throw ex;
 		}
 		return output;
 	}
 
-	public Transfer getTransferById(int transferId) throws TransferNotFoundException {
+	public Transfer getTransferById(int transferId) throws TransferServiceException {
 		Transfer transfer = null;
 
 		try {
@@ -54,14 +54,14 @@ public class TransferService {
 
 			transfer = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, Transfer.class).getBody();
 		} catch (RestClientResponseException ex) {
-			throw new TransferNotFoundException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
+			throw new TransferServiceException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 
 		}
 
 		return transfer;
 	}
 
-	public Transfer sendBucks(TransferRequest request) throws TransferNotFoundException {
+	public Transfer sendBucks(TransferRequest request) throws TransferServiceException {
 		Transfer transfer = null;
 
 		try {
@@ -69,13 +69,13 @@ public class TransferService {
 			transfer = restTemplate.exchange(BASE_URL + "transfer", HttpMethod.POST, entity, Transfer.class).getBody();
 
 		} catch (RestClientResponseException ex) {
-			throw new TransferNotFoundException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
+			throw new TransferServiceException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 		}
 		return transfer;
 
 	}
 
-	public AccountBalance getBalance() {
+	public AccountBalance getBalance() throws TransferServiceException {
 		AccountBalance balance = null;
 
 		try {
@@ -84,13 +84,13 @@ public class TransferService {
 			balance = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, AccountBalance.class)
 					.getBody();
 		} catch (RestClientResponseException ex) {
-			System.out.println("Error gettting balance.");
+			throw new TransferServiceException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 		}
 
 		return balance;
 	}
 
-	public Transfer pendingRequests(TransferRequest transferRequest) throws RestClientResponseException {
+	public Transfer pendingRequests(TransferRequest transferRequest) throws TransferServiceException {
 		Transfer transfer = null;
 
 		try {
@@ -98,13 +98,13 @@ public class TransferService {
 			String requestUrl = BASE_URL + "transfer";
 			transfer = restTemplate.exchange(requestUrl, HttpMethod.GET, securityHeaders, Transfer.class).getBody();
 		} catch (RestClientResponseException ex) {
-			ex.printStackTrace();
+			throw new TransferServiceException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 		}
 
 		return transfer;
 	}
 
-	public Transfer requestTEBucks(TransferRequest request) throws RestClientResponseException {
+	public Transfer requestTEBucks(TransferRequest request) throws RestClientResponseException, TransferServiceException {
 		Transfer transfer = null;
 
 		try {
@@ -112,8 +112,7 @@ public class TransferService {
 			transfer = restTemplate.exchange(BASE_URL + "transfer", HttpMethod.POST, entity, Transfer.class).getBody();
 
 		} catch (RestClientResponseException ex) {
-			System.out.println("Unable to make your transfer, try again later");
-			ex.printStackTrace();
+			throw new TransferServiceException(ex.getRawStatusCode() + ": " + ex.getResponseBodyAsString());
 		}
 		return transfer;
 

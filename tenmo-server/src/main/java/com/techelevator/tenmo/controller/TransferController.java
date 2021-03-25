@@ -17,9 +17,12 @@ import com.techelevator.tenmo.dao.TransferDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.dao.UserSqlDAO;
 import com.techelevator.tenmo.model.AccountBalance;
+import com.techelevator.tenmo.model.AccountNotFoundException;
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.TransferNotFoundException;
 import com.techelevator.tenmo.model.TransferRequest;
 import com.techelevator.tenmo.model.User;
+import com.techelevator.tenmo.model.UserNotFoundException;
 
 @PreAuthorize("isAuthenticated()")
 @RestController
@@ -39,8 +42,8 @@ public class TransferController {
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
 		if (userId != request.getTransferFrom()) {
-			// throw custom exception here
-			throw new Exception("You don't have permission to make this transfer");
+			
+			throw new AccountNotFoundException();
 		}
 
 		return this.transferDAO.sendTransfer(request);
@@ -48,7 +51,7 @@ public class TransferController {
 	}
 
 	@RequestMapping(path = "/transfer", method = RequestMethod.GET)
-	public List<Transfer> listTransfers(Principal principal) {
+	public List<Transfer> listTransfers(Principal principal) throws TransferNotFoundException, UserNotFoundException {
 
 		String username = principal.getName();
 		int userId = this.userDAO.findIdByUsername(username);
@@ -58,7 +61,7 @@ public class TransferController {
 	}
 
 	@RequestMapping(path = "/transfer/{transferId}", method = RequestMethod.GET)
-	public Transfer getTransferById(@PathVariable int transferId) {
+	public Transfer getTransferById(@PathVariable int transferId) throws TransferNotFoundException{
 
 		return transferDAO.getTransferById(transferId);
 	}
