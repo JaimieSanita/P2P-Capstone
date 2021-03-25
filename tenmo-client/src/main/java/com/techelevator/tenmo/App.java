@@ -121,8 +121,7 @@ public class App {
 		BigDecimal currentBalance = this.transferService.getBalance().getBalance();
 		if (newAmount.compareTo(new BigDecimal(0)) == -1) {
 			System.out.println("You cannot transfer a negative amount. Please try again.");
-		}
-		else if (newAmount.compareTo(currentBalance) == 1) {
+		} else if (newAmount.compareTo(currentBalance) == 1) {
 			System.out.println("You cannot transfer an amount greater than your account balance. Please try again.");
 		} else {
 			TransferRequest request = new TransferRequest();

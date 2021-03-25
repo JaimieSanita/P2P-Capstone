@@ -61,13 +61,7 @@ public class TransferController {
 	public Transfer getTransferById(@PathVariable int transferId) {
 
 		return transferDAO.getTransferById(transferId);
-
-		// Transfer transfer = new Transfer(1, 11,12,13, 1, BigDecimal.valueOf(1));
-
-		// return transfer;
 	}
 
-//TODO transfersqlDAO
-//TODO accountBalanceSqlDAO
 
 }

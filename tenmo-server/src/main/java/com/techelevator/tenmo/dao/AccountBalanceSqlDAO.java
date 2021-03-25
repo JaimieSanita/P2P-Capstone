@@ -33,7 +33,7 @@ public class AccountBalanceSqlDAO implements AccountBalanceDAO {
 
 	@Override
 	public void addToBalance(TransferRequest transferRequest) {
-		// AccountBalance account = findAccountById(id);
+		
 		AccountBalance balance = this.findAccountById(transferRequest.getTransferFrom());
 
 		BigDecimal newBalance = balance.getBalance().add(transferRequest.getAmount());
@@ -53,9 +53,6 @@ public class AccountBalanceSqlDAO implements AccountBalanceDAO {
 
 	}
 
-	// we need to figure out constructor relationship here
-	// do we need an empty constructor maybe?
-	//
 	private AccountBalance mapRowToAccount(SqlRowSet results) {
 
 		AccountBalance ab = new AccountBalance();
