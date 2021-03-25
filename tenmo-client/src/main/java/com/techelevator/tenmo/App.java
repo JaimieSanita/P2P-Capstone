@@ -75,7 +75,6 @@ public class App {
 			} else if (MAIN_MENU_OPTION_LOGIN.equals(choice)) {
 				login();
 			} else {
-				// the only other option on the main menu is to exit
 				exitProgram();
 			}
 		}
@@ -110,38 +109,35 @@ public class App {
 		do {
 			userID = this.console.promptForUserID(users);
 			if (userID == this.currentUser.getUser().getId()) {
-				System.out.println("You cannot send money to yourself."); // generic printer
+				System.out.println("You cannot send money to yourself.");
 			}
 		} while (!(userID == 0 || userID != this.currentUser.getUser().getId()));
 		if (userID == 0) {
 			return;
 		}
 
-		int transferAmount = this.console.getUserInputInteger("Enter amount ");
+		int transferAmount = this.console.getUserInputInteger("Enter whole number. Do not include $");
 		BigDecimal newAmount = BigDecimal.valueOf(transferAmount);
-		// if(negative and >accountBalance)
-		TransferRequest request = new TransferRequest();
-		request.setAmount(newAmount);
-		request.setTransferTo(userID);
-		request.setTransferFrom(this.currentUser.getUser().getId());
-		Transfer transfer;
-		try {
-			transfer = this.transferService.sendBucks(request);
-			System.out.println("Your transfer is complete.");
-		} catch (TransferNotFoundException e) {
-			e.printStackTrace();
+		BigDecimal currentBalance = this.transferService.getBalance().getBalance();
+		if (newAmount.compareTo(new BigDecimal(0)) == -1) {
+			System.out.println("You cannot transfer a negative amount. Please try again.");
 		}
+		else if (newAmount.compareTo(currentBalance) == 1) {
+			System.out.println("You cannot transfer an amount greater than your account balance. Please try again.");
+		} else {
+			TransferRequest request = new TransferRequest();
+			request.setAmount(newAmount);
+			request.setTransferTo(userID);
+			request.setTransferFrom(this.currentUser.getUser().getId());
+			Transfer transfer;
+			try {
+				transfer = this.transferService.sendBucks(request);
+				System.out.println("Your transfer is complete!");
 
-	}
-
-	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void requestBucks() {
-		// TODO Auto-generated method stub
-
+			} catch (TransferNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void exitProgram() {
@@ -209,5 +205,15 @@ public class App {
 		String username = console.getUserInput("Username");
 		String password = console.getUserInput("Password");
 		return new UserCredentials(username, password);
+	}
+
+	private void viewPendingRequests() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void requestBucks() {
+		// TODO Auto-generated method stub
+
 	}
 }
